@@ -1,129 +1,88 @@
-#-*-coding:utf8;-*-
-#qpy:2
-#qpy:console
-
-print """
-This is Blackjack counting.
-The card values are as follows: 
-2-6 = +1, 7-9 = 0, 10-Ace= -1 
-At the end, your running count should
-be zero. Happy counting!
-"""
-
-from random import randint 
 from random import shuffle
-from itertools import product
 
-cards = [['ace', '2', '3', '4', '5',
-          '6', '7', '8', '9', '10',
-          'Jack', 'Queen', 'King', 
-          'Ace'], ['Spades', 'Hearts',
-          'Clubs', 'Diamonds']]
-      
-running_count = 0
+r_count = 0
 
-class Card(object):
-
-    def __init__(self, value, suit):
-        self.value = value
+class Card:
+    def __init__(self, rank, suit):
+        self.rank = rank
         self.suit = suit
-        
+
     def draw(self):
-        print self.value, "of", self.suit
-                
+        global r_count
+        letters = {1:'Ace', 11:'Jack', 12:'Queen', 13:'King'}
+        letter = letters.get(self.rank, str(self.rank))
+        print "%s of %s" % (letter, self.suit)
+        if self.rank in range(2,7):
+            r_count += 1
+            print "Running count is", r_count
+        elif self.rank in range(10,14):
+            r_count -= 1
+            print "Running count is", r_count
+        elif self.rank == 1:
+            r_count -= 1
+            print "Running count is", r_count
 
-twoS = Card ('2', 'Spades')
-twoH = Card ('2', 'Hearts')
-twoC = Card ('2', 'Clubs')
-twoD = Card ('2', 'Diamonds')
-threeS = Card ('3', 'Spades')
-threeH = Card ('3', 'Hearts')
-threeC = Card ('3', 'Clubs')
-threeD = Card ('3', 'Diamonds')
-fourS = Card ('4', 'Spades')
-fourH = Card ('4', 'Hearts')
-fourC = Card ('4', 'Clubs')
-fourD = Card ('4', 'Diamonds')
-fiveS = Card ('5', 'Spades')
-fiveH = Card ('5', 'Hearts')
-fiveC = Card ('5', 'Clubs')
-fiveD = Card ('5', 'Diamonds')
-sixS = Card ('6', 'Spades')
-sixH = Card ('6', 'Hearts')
-sixC = Card ('6', 'Clubs')
-sixD = Card ('6', 'Diamonds')
-sevenS = Card ('7', 'Spades')
-sevenH = Card ('7', 'Hearts')
-sevenC = Card ('7', 'Clubs')
-sevenD = Card ('7', 'Diamonds')
-eightS = Card ('8', 'Spades')
-eightH = Card ('8', 'Hearts')
-eightC = Card ('8', 'Clubs')
-eightD = Card ('8', 'Diamonds')
-nineS = Card ('9', 'Spades')
-nineH = Card ('9', 'Hearts')
-nineC = Card ('9', 'Clubs')
-nineD = Card ('9', 'Diamonds')
-tenS = Card ('10', 'Spades')
-tenH = Card ('10', 'Hearts')
-tenC = Card ('10', 'Clubs')
-tenD = Card ('10', 'Diamonds')
-JS = Card ('Jack', 'Spades')
-JH = Card ('Jack', 'Hearts')
-JC = Card ('Jack', 'Clubs')
-JD = Card ('Jack', 'Diamonds')
-QS = Card ('Queen', 'Spades')
-QH = Card ('Queen', 'Hearts')
-QC = Card ('Queen', 'Clubs')
-QD = Card ('Queen', 'Diamonds')
-KS = Card ('King', 'Spades')
-KH = Card ('King', 'Hearts')
-KC = Card ('King', 'Clubs')
-KD = Card ('King', 'Diamonds')
-AS = Card ('Ace', 'Spades')
-AH = Card ('Ace', 'Hearts')
-AC = Card ('Ace', 'Clubs')
-AD = Card ('Ace', 'Diamonds')
+cards = [
+Card (1, 'Spades') ,
+Card (1, 'Hearts') ,
+Card (1, 'Clubs') ,
+Card (1, 'Diamonds') ,
+Card (2, 'Spades') ,
+Card (2, 'Hearts') ,
+Card (2, 'Clubs') ,
+Card (2, 'Diamonds') ,
+Card (3, 'Spades') ,
+Card (3, 'Hearts') ,
+Card (3, 'Clubs') ,
+Card (3, 'Diamonds') ,
+Card (4, 'Spades') ,
+Card (4, 'Hearts') ,
+Card (4, 'Clubs') ,
+Card (4, 'Diamonds') ,
+Card (5, 'Spades') ,
+Card (5, 'Hearts') ,
+Card (5, 'Clubs') ,
+Card (5, 'Diamonds') ,
+Card (6, 'Spades') ,
+Card (6, 'Hearts') ,
+Card (6, 'Clubs') ,
+Card (6, 'Diamonds') ,
+Card (7, 'Spades') ,
+Card (7, 'Hearts') ,
+Card (7, 'Clubs') ,
+Card (7, 'Diamonds') ,
+Card (8, 'Spades') ,
+Card (8, 'Hearts') ,
+Card (8, 'Clubs') ,
+Card (8, 'Diamonds') ,
+Card (9, 'Spades') ,
+Card (9, 'Hearts') ,
+Card (9, 'Clubs') ,
+Card (9, 'Diamonds') ,
+Card (10, 'Spades') ,
+Card (10, 'Hearts') ,
+Card (10, 'Clubs') ,
+Card (10, 'Diamonds') ,
+Card (11, 'Spades') ,
+Card (11, 'Hearts') ,
+Card (11, 'Clubs') ,
+Card (11, 'Diamonds') ,
+Card (12, 'Spades') ,
+Card (12, 'Hearts') ,
+Card (12, 'Clubs') ,
+Card (12, 'Diamonds') ,
+Card (13, 'Spades') ,
+Card (13, 'Hearts') ,
+Card (13, 'Clubs') ,
+Card (13, 'Diamonds')
+]
 
-deck_of_cards = [
-        twoS, twoH, twoC, twoD,
-        threeS, threeH, threeC, threeD,
-        fourS, fourH, fourC, fourD,
-        fiveS, fiveH, fiveC, fiveD,
-        sixS, sixH, sixC, sixD,
-        sevenS, sevenH, sevenC, sevenD,
-        eightS, eightH, eightC, eightD,
-        nineS, nineH, nineC, nineD,
-        tenS, tenH, tenC, tenD,
-        JS, JH, JC, JD, QS, QH, QC, QD,
-        KS, KH, KC, KD,
-        AS, AH, AC, AD
-        ]
+shuffle(cards)
 
 
+print "press Enter to draw card"
+while len(cards) > 0:
+    action = raw_input()
 
-shuffle(deck_of_cards)
-
-def drawcard():
-
-    
-    print """
-    press Enter to draw card
-        """
-        
-    action = raw_input('> ')
-        
-    if action == '' and len(deck_of_cards)>0:
-        deck_of_cards.pop().draw()
-        drawcard()
-    elif action == '' and len(deck_of_cards)==0:
-        print """
-        That was that! Hope you arrived
-        at 0. If not, you fucked up.
-        """
-    else:
-        print "Wrong"
-        drawcard()
-        
-drawcard()
-
+    if action == '':
+        cards.pop().draw()
